@@ -19,10 +19,12 @@ if (!!targetNode) {
   }
 
   new MutationObserver(() => {
+    console.log({ translated });
+
     if (!translated && targetNode.innerText !== "Loading description...") {
       translateKatas(targetNode);
     }
-  }).observe(targetNode, { childList: true, subtree: true });
+  }).observe(targetNode, { childList: true });
 }
 
 function translateKatas(descriptionDiv) {
