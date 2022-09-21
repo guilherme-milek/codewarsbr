@@ -1,0 +1,28 @@
+.header {
+  border-radius: 5px;
+  padding: 0px 5px;
+}
+
+.header > p > strong {
+  color: white;
+}
+
+.success {
+  background-color: #008532;
+  box-shadow: 0px 0px 15px rgba(0, 255, 0, 0.25);
+  animation: green-glow 2000ms infinite alternate-reverse;
+}
+
+.fail {
+  background-color: #7d2615;
+}
+
+@keyframes green-glow {
+  from {
+    box-shadow: 0px 0px 15px rgba(0, 255, 0, 0.25);
+  }
+
+  to {
+    box-shadow: 0px 0px 15px rgba(0, 255, 0, 0);
+  }
+}
