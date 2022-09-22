@@ -14,7 +14,12 @@
     {
       "matches": ["https://www.codewars.com/*"],
       "run_at": "document_idle",
-      "js": ["contentScript.js"],
+      "js": [
+        "codemirror.js",
+        "syntax_highlight.js",
+        "markdown_display.js",
+        "contentScript.js"
+      ],
       "css": ["contentScript.css"]
     }
   ]

@@ -1,5 +1,4 @@
-const markdown = require('markdown').markdown;
-
+import { markdownWithLanguage } from './markdown_display.js';
 import './contentScript.css';
 
 // DETECT URL changes on the website.
@@ -56,25 +55,18 @@ function translateKatas(descriptionDiv) {
 
       const mdContent = response.results[0].translated_description;
 
-      const htmlContent = markdown.toHTML(mdContent);
-
-      const descriptionDivTitle = document.querySelector('.wf-title-alt');
-
-      descriptionDivTitle.innerText = 'Descrição';
-
-      descriptionDiv.parentNode.insertBefore(
-        createHeader('success'),
-        descriptionDivTitle
-      );
+      const htmlContent = markdownWithLanguage(mdContent, 'javascript');
 
       descriptionDiv.innerHTML = htmlContent;
 
+      descriptionDiv.prepend(createHeader('success'));
+
+      translated = true;
+    })
+    .catch(() => {
+      descriptionDiv.prepend(createHeader('fail'));
       translated = true;
     });
-  // .catch(() => {
-  //   descriptionDiv.prepend(createHeader('fail'));
-  //   translated = true;
-  // });
 }
 
 function createHeader(type) {
