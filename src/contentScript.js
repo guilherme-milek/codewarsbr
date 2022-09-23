@@ -34,6 +34,7 @@ function translateKatas(descriptionDiv) {
   const kataIdIndex = websiteURL.findIndex((element) => element === 'kata') + 1;
 
   const kataId = websiteURL[kataIdIndex];
+  const kataLanguage = websiteURL.at(-1);
 
   const encodedURIComponent =
     'where=' + encodeURIComponent(`{"id": "${kataId}"}`);
@@ -55,9 +56,11 @@ function translateKatas(descriptionDiv) {
 
       const mdContent = response.results[0].translated_description;
 
-      const htmlContent = markdownWithLanguage(mdContent, 'javascript');
+      const htmlContent = markdownWithLanguage(mdContent, kataLanguage);
 
       descriptionDiv.innerHTML = htmlContent;
+
+      descriptionDiv.style.overflowY = 'hidden';
 
       descriptionDiv.prepend(createHeader('success'));
 
