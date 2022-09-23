@@ -51,7 +51,10 @@ function translateKatas(descriptionDiv) {
     .then((response) => response.json())
     .then((response) => {
       if (!response.results.length) {
-        throw new Error();
+        throw 'fail';
+      }
+      if (response.results[0].description_translated === 'FALSE') {
+        throw 'working';
       }
 
       const mdContent = response.results[0].translated_description;
@@ -66,8 +69,15 @@ function translateKatas(descriptionDiv) {
 
       translated = true;
     })
-    .catch(() => {
-      descriptionDiv.prepend(createHeader('fail'));
+    .catch((e) => {
+      if (e === 'fail') {
+        descriptionDiv.prepend(createHeader('fail'));
+      } else if (e === 'working') {
+        descriptionDiv.prepend(createHeader('working'));
+      } else {
+        descriptionDiv.prepend(createHeader('error'));
+      }
+
       translated = true;
     });
 }
@@ -79,7 +89,11 @@ function createHeader(type) {
   p.innerHTML =
     type === 'success'
       ? 'Esse kata foi traduzido para português! &#128077'
-      : 'Sem tradução disponível para esse kata! &#128078';
+      : type === 'working'
+      ? 'Esse kata está sendo traduzido! &#9881'
+      : type === 'fail'
+      ? 'Sem tradução disponível para esse kata! &#128078'
+      : 'Um erro ocorreu ao traduzir esse kata! &#10060';
 
   div.classList.add('header', type);
 

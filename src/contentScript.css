@@ -15,7 +15,17 @@
   animation: green-glow 2000ms infinite alternate-reverse;
 }
 
+.working {
+  background-color: rgb(85, 85, 85);
+  box-shadow: 0px 0px 15px rgba(173, 173, 173, 0.25);
+  animation: blue-glow 2000ms infinite alternate-reverse;
+}
+
 .fail {
+  background-color: rgb(112, 112, 0);
+}
+
+.error {
   background-color: #7d2615;
 }
 
@@ -26,5 +36,15 @@
 
   to {
     box-shadow: 0px 0px 15px rgba(0, 255, 0, 0);
+  }
+}
+
+@keyframes blue-glow {
+  from {
+    box-shadow: 0px 0px 15px rgba(173, 173, 173, 0.25);
+  }
+
+  to {
+    box-shadow: 0px 0px 15px rgba(173, 173, 173, 0);
   }
 }
