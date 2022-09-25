@@ -12,9 +12,10 @@ export async function translateKatas(kataDescriptionDiv) {
     .querySelector(languageSelectorDropdown)
     .innerText.toLowerCase();
 
-  const kataLanguage = !!websiteURL.at(-1)
-    ? websiteURL.at(-1)
-    : languageSelectorContent;
+  const kataLanguage =
+    !!websiteURL.at(-1) && websiteURL.at(-1) !== kataId
+      ? websiteURL.at(-1)
+      : languageSelectorContent;
 
   const encodedURIComponent =
     'q=' + encodeURIComponent(`{"kata_id": "${kataId}"}`);
