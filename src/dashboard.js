@@ -41,9 +41,11 @@ export async function updateKataStatusFromList(
             throw 'working';
           }
 
+          kataNameA.innerHTML = kataNameA.innerText;
           kataNameA.append(createStatus('success'));
         } catch (statusType) {
           if (['fail', 'working', 'error'].includes(statusType)) {
+            kataNameA.innerHTML = kataNameA.innerText;
             kataNameA.append(createStatus(statusType));
           } else {
             console.error(statusType);
