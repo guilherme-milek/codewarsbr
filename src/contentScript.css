@@ -68,3 +68,13 @@ a[href^='/kata/'][checked='true'] {
   align-items: center;
   gap: 5px;
 }
+
+.toast {
+  background-color: #6795de;
+  text-transform: uppercase;
+  border-radius: 4px;
+  letter-spacing: 0.2px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #131414;
+}

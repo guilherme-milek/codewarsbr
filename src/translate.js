@@ -1,7 +1,6 @@
 import { BASE_URL, API_KEY } from './env.js';
 import { markdownWithLanguage } from './markdown_display.js';
 import { translated } from './controllers.js';
-
 import { languageSelectorDropdown } from './selectors.js';
 
 export async function translateKatas(kataDescriptionDiv) {
