@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Coderwars BR",
-  "version": "2022.9.0",
+  "version": "2022.9.1",
   "description": "Traduza katas de Coderwars de forma automática!",
 
   "icons": {
@@ -14,12 +14,7 @@
     {
       "matches": ["https://www.codewars.com/*"],
       "run_at": "document_idle",
-      "js": [
-        "codemirror.js",
-        "syntax_highlight.js",
-        "markdown_display.js",
-        "contentScript.js"
-      ],
+      "js": ["contentScript.js"],
       "css": ["contentScript.css"]
     }
   ]

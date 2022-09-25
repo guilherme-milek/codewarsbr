@@ -1,7 +1,7 @@
 {
   "name": "codewarsbr",
-  "version": "0.1.0",
-  "description": "My Chrome Extension",
+  "version": "2022.9.1",
+  "description": "Traduza katas de Coderwars de forma automática!",
   "private": true,
   "scripts": {
     "watch": "webpack --mode=development --watch --config config/webpack.config.js",
@@ -9,7 +9,7 @@
     "format": "prettier --write --ignore-unknown \"{config,public,src}/**/*.{html,css,js,ts,json}\""
   },
   "devDependencies": {
-    "copy-webpack-plugin": "^10.2.4",
+    "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
     "file-loader": "^6.2.0",
     "mini-css-extract-plugin": "^2.6.1",
@@ -27,8 +27,22 @@
     "codemirror-mode-elixir": "^1.1.2",
     "codemirror-solidity": "^0.2.5",
     "dompurify": "^2.4.0",
+    "katex": "^0.16.2",
     "marked": "^4.1.0",
-    "nim-codemirror-mode": "^0.2.0",
-    "npm": "^8.19.2"
-  }
+    "nim-codemirror-mode": "0.2.0",
+    "npm": "^8.19.2",
+    "tex": "^1.0.2",
+    "tippy.js": "^6.3.7"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/guilherme-milek/codewarsbr.git"
+  },
+  "author": "Guilherme Preveda Milék <guilhermeprevedamilek@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/guilherme-milek/codewarsbr/issues"
+  },
+  "homepage": "https://github.com/guilherme-milek/codewarsbr#readme"
 }
