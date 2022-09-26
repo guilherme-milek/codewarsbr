@@ -6,10 +6,14 @@ import { statusUpdated } from './controllers.js';
 import './tooltip.css'; // Tooltip theme (for Tippy)
 
 export async function updateKataStatusFromList(
-  kataDivNodeList,
-  kataNameANodeList
+  kataNameANodeList,
+  kataDivNodeList
 ) {
-  const kataIds = [...kataDivNodeList].map(({ id }) => id);
+  const kataIds = [...kataNameANodeList].map(({ href }) => {
+    const kataURL = href.split('/');
+    const kataIdIndex = kataURL.findIndex((element) => element === 'kata') + 1;
+    return kataURL[kataIdIndex];
+  });
 
   const encodedURIComponent =
     'q=' +

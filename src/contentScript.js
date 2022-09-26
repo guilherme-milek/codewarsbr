@@ -8,8 +8,10 @@ import { translateKatas } from './translate.js';
 import {
   allNonCheckedKatasDivPracticeSelector,
   allNonCheckedKatasDivCollectionSelector,
+  allNonCheckedKatasDivUsersSelector,
   kataDivsSelector,
   kataNameAsSelector,
+  kataNameAsUsersSelector,
   kataDescriptionDivSelector,
 } from './selectors.js';
 import { translated, statusUpdated } from './controllers.js';
@@ -26,15 +28,21 @@ new MutationObserver(() => {
   }
 }).observe(document, { childList: true, subtree: true });
 
-console.log(lastUrl);
-
 const allNonCheckedKatasDiv = document.querySelector(
   lastUrl.split('/').includes('collections')
     ? allNonCheckedKatasDivCollectionSelector
+    : lastUrl.split('/').includes('users')
+    ? allNonCheckedKatasDivUsersSelector
     : allNonCheckedKatasDivPracticeSelector
 );
 let kataDivNodeList = document.querySelectorAll(kataDivsSelector);
-let kataNameANodeList = document.querySelectorAll(kataNameAsSelector);
+
+const kataNameANodeListSelector = () =>
+  lastUrl.split('/').includes('users')
+    ? kataNameAsUsersSelector
+    : kataNameAsSelector;
+
+let kataNameANodeList = document.querySelectorAll(kataNameANodeListSelector());
 
 const kataDescriptionDiv = document.querySelector(kataDescriptionDivSelector);
 
@@ -89,7 +97,7 @@ const kataDivNodeListGetter = () => {
   kataDivNodeList = document.querySelectorAll(kataDivsSelector);
 };
 const kataNameANodeListGetter = () => {
-  kataNameANodeList = document.querySelectorAll(kataNameAsSelector);
+  kataNameANodeList = document.querySelectorAll(kataNameANodeListSelector());
 };
 
 async function checkStatusObserver() {
@@ -104,6 +112,6 @@ async function checkStatusObserver() {
 
     statusUpdated = true;
 
-    await updateKataStatusFromList(kataDivNodeList, kataNameANodeList);
+    await updateKataStatusFromList(kataNameANodeList, kataDivNodeList);
   }
 }
