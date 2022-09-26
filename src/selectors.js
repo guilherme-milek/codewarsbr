@@ -1,5 +1,8 @@
-export const allNonCheckedKatasDivSelector =
+export const allNonCheckedKatasDivPracticeSelector =
   '#shell_content > ul + section > div:nth-last-child(1)';
+
+export const allNonCheckedKatasDivCollectionSelector =
+  '#shell_content > div:nth-last-child(1) > div:nth-last-child(1)';
 
 export const kataDivsSelector = "div.list-item-kata:not([id=''])";
 

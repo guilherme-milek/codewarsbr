@@ -6,7 +6,8 @@ import './contentScript.css';
 import { updateKataStatusFromList } from './dashboard.js';
 import { translateKatas } from './translate.js';
 import {
-  allNonCheckedKatasDivSelector,
+  allNonCheckedKatasDivPracticeSelector,
+  allNonCheckedKatasDivCollectionSelector,
   kataDivsSelector,
   kataNameAsSelector,
   kataDescriptionDivSelector,
@@ -25,8 +26,12 @@ new MutationObserver(() => {
   }
 }).observe(document, { childList: true, subtree: true });
 
+console.log(lastUrl);
+
 const allNonCheckedKatasDiv = document.querySelector(
-  allNonCheckedKatasDivSelector
+  lastUrl.split('/').includes('collections')
+    ? allNonCheckedKatasDivCollectionSelector
+    : allNonCheckedKatasDivPracticeSelector
 );
 let kataDivNodeList = document.querySelectorAll(kataDivsSelector);
 let kataNameANodeList = document.querySelectorAll(kataNameAsSelector);
