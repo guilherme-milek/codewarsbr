@@ -55,20 +55,17 @@ export async function updateKataStatusFromList(
 
           const kataData = response.find(({ kata_id }) => kata_id === kataId);
 
+          kataNameA.setAttribute('checked', true);
+          kataNameA.innerHTML = kataNameA.innerText;
+
           if (!kataData || !kataIds.includes(kataId)) {
-            kataNameA.innerHTML = kataNameA.innerText;
             return kataNameA.append(createStatus('fail'));
           }
           if (!kataData.translated_description) {
-            kataNameA.innerHTML = kataNameA.innerText;
             return kataNameA.append(createStatus('working'));
           }
 
-          kataNameA.innerHTML = kataNameA.innerText;
-
           kataNameA.append(createStatus('success'));
-
-          kataNameA.setAttribute('checked', true);
         });
       })
       .catch((error) => {

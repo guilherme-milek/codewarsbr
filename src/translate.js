@@ -46,6 +46,8 @@ export async function translateKatas(kataDescriptionDiv) {
     })
       .then((response) => response.json())
       .then((response) => {
+        kataDescriptionDiv.classList.add('fix-scroll');
+
         if (!response.length) {
           return kataDescriptionDiv.parentElement.prepend(createHeader('fail'));
         }
@@ -63,7 +65,7 @@ export async function translateKatas(kataDescriptionDiv) {
         );
 
         kataDescriptionDiv.innerHTML = htmlContent;
-        kataDescriptionDiv.classList.add('fix-scroll');
+
         kataDescriptionDiv.parentElement.prepend(createHeader('success'));
       })
       .catch((error) => {
