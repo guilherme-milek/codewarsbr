@@ -1,8 +1,17 @@
+import 'toastify-js/src/toastify.css';
+import Toastify from 'toastify-js';
+
 import 'animate.css';
 import tippy, { roundArrow } from 'tippy.js';
 
 import { BASE_URL, API_KEY } from './env.js';
+import { mouseOverEventCallback } from './mouseover.js';
 import { statusUpdated } from './controllers.js';
+import {
+  toastErrorConfig,
+  toastInfoConfig,
+  toastSuccessConfig,
+} from './toast.js';
 
 import './tooltip.css'; // Tooltip theme (for Tippy)
 
@@ -10,28 +19,35 @@ export async function updateKataStatusFromList(
   kataNameANodeList,
   kataDivNodeList
 ) {
-  const kataIds = [...kataNameANodeList].map(({ href }) => {
-    const kataURL = href.split('/');
-    const kataIdIndex = kataURL.findIndex((element) => element === 'kata') + 1;
-    return kataURL[kataIdIndex];
+  const infoToast = Toastify({
+    ...toastInfoConfig,
+    text: 'Obtendo status das traduções...',
   });
+  infoToast.showToast();
 
-  const encodedURIComponent =
-    'q=' +
-    encodeURIComponent(`{"kata_id": {"$in": ${JSON.stringify(kataIds)}}}`);
+  try {
+    const kataIds = [...kataNameANodeList].map(({ href }) => {
+      const kataURL = href.split('/');
+      const kataIdIndex =
+        kataURL.findIndex((element) => element === 'kata') + 1;
+      return kataURL[kataIdIndex];
+    });
 
-  const urlRequest = `${BASE_URL}/rest/katas?${encodedURIComponent}`;
+    const encodedURIComponent =
+      'q=' +
+      encodeURIComponent(`{"kata_id": {"$in": ${JSON.stringify(kataIds)}}}`);
 
-  await fetch(urlRequest, {
-    headers: {
-      'cache-control': 'no-cache',
-      'x-apikey': API_KEY,
-    },
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      kataNameANodeList.forEach((kataNameA) => {
-        try {
+    const urlRequest = `${BASE_URL}/rest/katas?${encodedURIComponent}`;
+
+    await fetch(urlRequest, {
+      headers: {
+        'cache-control': 'no-cache',
+        'x-apikey': API_KEY,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        kataNameANodeList.forEach((kataNameA) => {
           const kataURL = kataNameA.href.split('/');
           const kataIdIndex =
             kataURL.findIndex((element) => element === 'kata') + 1;
@@ -40,30 +56,43 @@ export async function updateKataStatusFromList(
           const kataData = response.find(({ kata_id }) => kata_id === kataId);
 
           if (!kataData || !kataIds.includes(kataId)) {
-            throw 'fail';
+            kataNameA.innerHTML = kataNameA.innerText;
+            return kataNameA.append(createStatus('fail'));
           }
           if (!kataData.translated_description) {
-            throw 'working';
+            kataNameA.innerHTML = kataNameA.innerText;
+            return kataNameA.append(createStatus('working'));
           }
 
           kataNameA.innerHTML = kataNameA.innerText;
 
           kataNameA.append(createStatus('success'));
-        } catch (statusType) {
-          if (['fail', 'working', 'error'].includes(statusType)) {
-            kataNameA.innerHTML = kataNameA.innerText;
 
-            kataNameA.append(createStatus(statusType));
-          } else {
-            console.error(statusType);
-          }
-        }
-        kataNameA.setAttribute('checked', true);
+          kataNameA.setAttribute('checked', true);
+        });
+      })
+      .catch((error) => {
+        throw new Error(error);
       });
-    })
-    .catch((error) => console.error(error));
 
-  statusUpdated = false;
+    infoToast.hideToast();
+
+    Toastify({
+      ...toastSuccessConfig,
+      text: 'Status das traduções obtidos com sucesso!',
+    }).showToast();
+
+    statusUpdated = false;
+  } catch (error) {
+    infoToast.hideToast();
+
+    Toastify({
+      ...toastErrorConfig,
+      text: error,
+    }).showToast();
+
+    console.error(error);
+  }
 }
 
 function createStatus(statusType = 'error') {
@@ -102,6 +131,14 @@ function createStatus(statusType = 'error') {
     'animate__animated',
     'animate__jackInTheBox'
   );
+
+  span.addEventListener('animationend', () => {
+    span.classList.remove('animate__jackInTheBox');
+
+    span.addEventListener('mouseover', () =>
+      mouseOverEventCallback(span, 'animate__rubberBand')
+    );
+  });
 
   return span;
 }

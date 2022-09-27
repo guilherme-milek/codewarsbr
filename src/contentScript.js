@@ -1,6 +1,3 @@
-import 'toastify-js/src/toastify.css';
-import Toastify from 'toastify-js';
-
 import './contentScript.css';
 
 import { updateKataStatusFromList } from './dashboard.js';
@@ -46,18 +43,6 @@ let kataNameANodeList = document.querySelectorAll(kataNameANodeListSelector());
 
 const kataDescriptionDiv = document.querySelector(kataDescriptionDivSelector);
 
-const toastDefaultConfig = {
-  duration: -1,
-  close: false,
-  gravity: 'top', // `top` or `bottom`
-  position: 'center', // `left`, `center` or `right`
-  stopOnFocus: false, // Prevents dismissing of toast on hover
-  className: 'toast',
-  style: {
-    background: '#6795de',
-  },
-};
-
 if (!!allNonCheckedKatasDiv && !!kataNameANodeList.length) {
   checkStatusObserver();
 
@@ -82,16 +67,9 @@ async function translateKataObserver() {
     !translated &&
     kataDescriptionDiv.innerText !== 'Loading description...'
   ) {
-    const gettingInfoToast = Toastify({
-      ...toastDefaultConfig,
-      text: 'Obtendo informações da tradução...',
-    });
-    gettingInfoToast.showToast();
-
     translated = true;
 
     await translateKatas(kataDescriptionDiv);
-    gettingInfoToast.hideToast();
   }
 }
 
@@ -107,15 +85,8 @@ async function checkStatusObserver() {
   kataNameANodeListGetter();
 
   if (!statusUpdated && !!kataNameANodeList.length) {
-    const gettingInfoToast = Toastify({
-      ...toastDefaultConfig,
-      text: 'Obtendo informações das traduções...',
-    });
-    gettingInfoToast.showToast();
-
     statusUpdated = true;
 
     await updateKataStatusFromList(kataNameANodeList, kataDivNodeList);
-    gettingInfoToast.hideToast();
   }
 }

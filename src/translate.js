@@ -1,41 +1,58 @@
+import 'toastify-js/src/toastify.css';
+import Toastify from 'toastify-js';
+
 import { BASE_URL, API_KEY } from './env.js';
 import { markdownWithLanguage } from './markdown_display.js';
-import { translated } from './controllers.js';
 import { languageSelectorDropdown } from './selectors.js';
+import { translated } from './controllers.js';
+import {
+  toastErrorConfig,
+  toastInfoConfig,
+  toastSuccessConfig,
+} from './toast.js';
 
 export async function translateKatas(kataDescriptionDiv) {
-  const websiteURL = window.location.toString().split('/');
-  const kataIdIndex = websiteURL.findIndex((element) => element === 'kata') + 1;
-  const kataId = websiteURL[kataIdIndex];
+  const infoToast = Toastify({
+    ...toastInfoConfig,
+    text: 'Obtendo a tradução desse kata...',
+  });
+  infoToast.showToast();
 
-  const languageSelectorContent = document
-    .querySelector(languageSelectorDropdown)
-    .innerText.toLowerCase();
+  try {
+    const websiteURL = window.location.toString().split('/');
+    const kataIdIndex =
+      websiteURL.findIndex((element) => element === 'kata') + 1;
+    const kataId = websiteURL[kataIdIndex];
 
-  const kataLanguage =
-    !!websiteURL.at(-1) && websiteURL.at(-1) !== kataId
-      ? websiteURL.at(-1)
-      : languageSelectorContent;
+    const languageSelectorContent = document
+      .querySelector(languageSelectorDropdown)
+      .innerText.toLowerCase();
 
-  const encodedURIComponent =
-    'q=' + encodeURIComponent(`{"kata_id": "${kataId}"}`);
+    const kataLanguage =
+      !!websiteURL.at(-1) && websiteURL.at(-1) !== kataId
+        ? websiteURL.at(-1)
+        : languageSelectorContent;
 
-  const urlRequest = `${BASE_URL}/rest/katas?${encodedURIComponent}`;
+    const encodedURIComponent =
+      'q=' + encodeURIComponent(`{"kata_id": "${kataId}"}`);
 
-  await fetch(urlRequest, {
-    headers: {
-      'cache-control': 'no-cache',
-      'x-apikey': API_KEY,
-    },
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      try {
+    const urlRequest = `${BASE_URL}/rest/katas?${encodedURIComponent}`;
+
+    await fetch(urlRequest, {
+      headers: {
+        'cache-control': 'no-cache',
+        'x-apikey': API_KEY,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
         if (!response.length) {
-          throw 'fail';
+          return kataDescriptionDiv.parentElement.prepend(createHeader('fail'));
         }
         if (!response[0].translated_description) {
-          throw 'working';
+          return kataDescriptionDiv.parentElement.prepend(
+            createHeader('working')
+          );
         }
 
         const kataTranslatedMarkdown = response[0].translated_description;
@@ -46,18 +63,31 @@ export async function translateKatas(kataDescriptionDiv) {
         );
 
         kataDescriptionDiv.innerHTML = htmlContent;
+        kataDescriptionDiv.classList.add('fix-scroll');
         kataDescriptionDiv.parentElement.prepend(createHeader('success'));
-      } catch (headerType) {
-        if (['fail', 'working', 'error'].includes(headerType)) {
-          kataDescriptionDiv.parentElement.prepend(createHeader(headerType));
-        } else {
-          console.error(headerType);
-        }
-      }
-    })
-    .catch((error) => console.error(error));
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
 
-  translated = true;
+    infoToast.hideToast();
+
+    Toastify({
+      ...toastSuccessConfig,
+      text: 'Tradução obtida com sucesso!',
+    }).showToast();
+
+    translated = true;
+  } catch (error) {
+    infoToast.hideToast();
+
+    Toastify({
+      ...toastErrorConfig,
+      text: error,
+    }).showToast();
+
+    console.error(error);
+  }
 }
 
 function createHeader(headerType = 'error') {
@@ -86,6 +116,10 @@ function createHeader(headerType = 'error') {
     'animate__animated',
     'animate__flipInX'
   );
+
+  div.addEventListener('animationend', () => {
+    div.classList.remove('animate__flipInX');
+  });
 
   div.appendChild(p);
 

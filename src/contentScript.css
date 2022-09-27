@@ -1,13 +1,8 @@
-:root {
-  --green-glow-25: rgb(0 255 0 / 25%);
-  --green-glow-0: rgb(0 255 0 / 0%);
-  --gray-glow-25: rgb(173 173 173 / 25%);
-  --gray-glow-0: rgb(173 173 173 / 0%);
-}
-
 .header {
   border-radius: 5px;
   padding: 0px 5px;
+
+  cursor: default;
 }
 
 .header > p {
@@ -51,8 +46,7 @@
 }
 
 .toast {
-  color: #131414;
-  background-color: #6795de;
+  color: #131414 !important;
 
   font-size: 12px;
   font-weight: 400;
@@ -60,30 +54,22 @@
   letter-spacing: 0.2px;
 
   border-radius: 4px;
+
+  cursor: default;
 }
 
-.green-glow {
-  animation: green-glow 2000ms infinite alternate-reverse;
+.toast.info {
+  background: #6795de;
 }
 
-@keyframes green-glow {
-  from {
-    box-shadow: 0px 0px 15px var(--green-glow-25);
-  }
-  to {
-    box-shadow: 0px 0px 15px var(--green-glow-0);
-  }
+.toast.error {
+  background: #de6767;
 }
 
-.gray-glow {
-  animation: gray-glow 2000ms infinite alternate-reverse;
+.toast.success {
+  background: #67de6d;
 }
 
-@keyframes gray-glow {
-  from {
-    box-shadow: 0px 0px 15px var(--gray-glow-25);
-  }
-  to {
-    box-shadow: 0px 0px 15px var(--gray-glow-0);
-  }
+.fix-scroll {
+  padding-bottom: 1px;
 }
