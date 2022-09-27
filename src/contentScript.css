@@ -11,7 +11,8 @@
   font-weight: 600;
 }
 
-.description-content > .header {
+.description-content > .header,
+#kata-details-description > .header {
   margin-bottom: 14px;
 }
 
