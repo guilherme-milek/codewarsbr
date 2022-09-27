@@ -46,12 +46,12 @@ let kataNameANodeList = document.querySelectorAll(kataNameANodeListSelector());
 
 const kataDescriptionDiv = document.querySelector(kataDescriptionDivSelector);
 
-const toastConfig = {
-  duration: 2500,
+const toastDefaultConfig = {
+  duration: -1,
   close: false,
   gravity: 'top', // `top` or `bottom`
   position: 'center', // `left`, `center` or `right`
-  stopOnFocus: true, // Prevents dismissing of toast on hover
+  stopOnFocus: false, // Prevents dismissing of toast on hover
   className: 'toast',
   style: {
     background: '#6795de',
@@ -82,14 +82,16 @@ async function translateKataObserver() {
     !translated &&
     kataDescriptionDiv.innerText !== 'Loading description...'
   ) {
-    Toastify({
-      ...toastConfig,
+    const gettingInfoToast = Toastify({
+      ...toastDefaultConfig,
       text: 'Obtendo informações da tradução...',
-    }).showToast();
+    });
+    gettingInfoToast.showToast();
 
     translated = true;
 
     await translateKatas(kataDescriptionDiv);
+    gettingInfoToast.hideToast();
   }
 }
 
@@ -105,13 +107,15 @@ async function checkStatusObserver() {
   kataNameANodeListGetter();
 
   if (!statusUpdated && !!kataNameANodeList.length) {
-    Toastify({
-      ...toastConfig,
+    const gettingInfoToast = Toastify({
+      ...toastDefaultConfig,
       text: 'Obtendo informações das traduções...',
-    }).showToast();
+    });
+    gettingInfoToast.showToast();
 
     statusUpdated = true;
 
     await updateKataStatusFromList(kataNameANodeList, kataDivNodeList);
+    gettingInfoToast.hideToast();
   }
 }

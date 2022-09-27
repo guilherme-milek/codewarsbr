@@ -23,6 +23,7 @@
     "@codewars/codemirror-lambda-calculus": "^0.3.3",
     "@codewars/codemirror-riscv": "^0.0.1",
     "@codewars/codemirror-unicode-helper": "^0.1.0",
+    "animate.css": "^4.1.1",
     "codemirror": "^5.65.9",
     "codemirror-mode-elixir": "^1.1.2",
     "codemirror-solidity": "^0.2.5",

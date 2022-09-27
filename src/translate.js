@@ -46,15 +46,14 @@ export async function translateKatas(kataDescriptionDiv) {
         );
 
         kataDescriptionDiv.innerHTML = htmlContent;
-        kataDescriptionDiv.prepend(createHeader('success'));
+        kataDescriptionDiv.parentElement.prepend(createHeader('success'));
       } catch (headerType) {
         if (['fail', 'working', 'error'].includes(headerType)) {
-          kataDescriptionDiv.prepend(createHeader(headerType));
+          kataDescriptionDiv.parentElement.prepend(createHeader(headerType));
         } else {
           console.error(headerType);
         }
       }
-      kataDescriptionDiv.style.overflowY = 'hidden';
     })
     .catch((error) => console.error(error));
 
@@ -81,7 +80,12 @@ function createHeader(headerType = 'error') {
 
   p.innerHTML = headerMessage;
 
-  div.classList.add('header', headerType);
+  div.classList.add(
+    'header',
+    headerType,
+    'animate__animated',
+    'animate__flipInX'
+  );
 
   div.appendChild(p);
 

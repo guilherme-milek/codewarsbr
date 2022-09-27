@@ -1,3 +1,4 @@
+import 'animate.css';
 import tippy, { roundArrow } from 'tippy.js';
 
 import { BASE_URL, API_KEY } from './env.js';
@@ -46,10 +47,12 @@ export async function updateKataStatusFromList(
           }
 
           kataNameA.innerHTML = kataNameA.innerText;
+
           kataNameA.append(createStatus('success'));
         } catch (statusType) {
           if (['fail', 'working', 'error'].includes(statusType)) {
             kataNameA.innerHTML = kataNameA.innerText;
+
             kataNameA.append(createStatus(statusType));
           } else {
             console.error(statusType);
@@ -93,7 +96,12 @@ function createStatus(statusType = 'error') {
   });
 
   span.innerHTML = emoji;
-  span.classList.add('pill', statusType);
+  span.classList.add(
+    'pill',
+    statusType,
+    'animate__animated',
+    'animate__jackInTheBox'
+  );
 
   return span;
 }
